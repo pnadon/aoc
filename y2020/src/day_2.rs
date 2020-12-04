@@ -1,7 +1,7 @@
 pub fn part_1(input: &str) -> usize {
     input.lines()
         .filter(|line| {
-            let reqs = password_reqs::parse(line);
+            let reqs = PasswordReqs::parse(line);
             let char_count = reqs.password.chars()
                 .filter(|c| *c == reqs.chr)
                 .count();
@@ -13,7 +13,7 @@ pub fn part_1(input: &str) -> usize {
 pub fn part_2(input: &str) -> usize {
     input.lines()
         .filter(|line| {
-            let reqs = password_reqs::parse(line);
+            let reqs = PasswordReqs::parse(line);
             (reqs.password.chars().nth(reqs.start - 1).unwrap() == reqs.chr)
             ^
             (reqs.password.chars().nth(reqs.end - 1).unwrap() == reqs.chr)
@@ -21,14 +21,14 @@ pub fn part_2(input: &str) -> usize {
         .count()
 }
 
-struct password_reqs {
+struct PasswordReqs {
     start: usize,
     end: usize,
     chr: char,
     password: String,
 }
 
-impl password_reqs {
+impl PasswordReqs {
     fn parse(input: &str) -> Self {
         let params = input.split(|c| c == ' ' || c == '-')
             .collect::<Vec<&str>>();
