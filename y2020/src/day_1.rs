@@ -16,7 +16,7 @@ pub fn part_2(target_sum: u32, nums: &str) {
     sorted_nums.sort();
     for num in sorted_nums {
         if num >= target_sum {
-            continue;
+            break;
         }
         if let Some(other_num) = part_1(target_sum - num, nums) {
             println!("Product of trio that sum to target: {:?}", num * other_num * (target_sum - (num + other_num)));
