@@ -5,6 +5,10 @@ mod day_3;
 mod day_4;
 mod day_5;
 mod day_6;
+mod day_7;
+mod day_8;
+mod day_9;
+
 fn main() {
     let day = args().nth(1)
         .expect("Must pass at least 1 param")
@@ -40,6 +44,14 @@ fn main() {
             let input = args().nth(2).unwrap();
             println!("{:?}", day_6::part_1(&input));
             println!("{:?}", day_6::part_2(&input));
+        },
+        8 => {
+            let input = args().nth(2).unwrap();
+            println!("{:?}", day_8::part_1(&input));
+        }
+        9 => {
+            let input = args.nth(2).unwrap();
+            println!("{:?}", day_9::part_1(&input));
         }
         _ => {
             println!("Invalid input");
