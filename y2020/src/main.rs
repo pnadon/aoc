@@ -50,7 +50,7 @@ fn main() {
             println!("{:?}", day_8::part_1(&input));
         }
         9 => {
-            let input = args.nth(2).unwrap();
+            let input = args().nth(2).unwrap();
             println!("{:?}", day_9::part_1(&input));
         }
         _ => {

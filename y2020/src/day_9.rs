@@ -1,15 +1,15 @@
 use std::collections::HashSet;
 
-pub fn part_1(input: &str) -> u32 {
-    let mut preamble = input.lines().map(|l| l.parse::<u32>().unwrap()).collect::<Vec<u32>>();
-    let nums = preamble.split_off(25);
+pub fn part_1(input: &str) -> u64 {
+    let nums = input.lines().map(|l| l.parse::<u64>().unwrap()).collect::<Vec<u64>>();
 
-    let set = preamble.into_iter().collect::<HashSet<u32>>();
+    *nums.iter().enumerate().skip(25)
+        .take_while(|(i, n)| {
+            let set = nums[(i-25)..*i].iter()
+                .collect::<HashSet<&u64>>();
 
-    for num in nums {
-        if !set.iter().any(|n| num > *n && set.contains(&(num - n))) {
-            return num
-        }
-    }
-    return 0
+            set.iter()
+                .any(|s| set.contains(&&(**s - **n)))
+    })
+    .last().unwrap().1
 }
