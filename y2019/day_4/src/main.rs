@@ -1,7 +1,7 @@
 // 235741 < num < 706948
 // minimum 1 repeating digit -> max 5 unique numbers
 // non-decreasing
-use std::time::{Instant};
+use std::time::Instant;
 
 fn main() {
     let mut num_passwords = 0;

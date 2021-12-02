@@ -1,18 +1,21 @@
-use std::fs::File;
 use std::env;
-use std::io::{ Error, Read};
+use std::fs::File;
+use std::io::{Error, Read};
 
 mod day_3;
-use day_3::{ Move, Point, find_min_intersection, find_min_travel };
+use day_3::{find_min_intersection, find_min_travel, Move, Point};
 
 fn parse_list(fname: &str) -> Result<Vec<Point>, Error> {
     let mut contents = String::new();
     File::open(fname)?.read_to_string(&mut contents)?;
-    let moves: Vec<Move> = contents.split(",").map(|e| day_3::Move::parse_input(e)).collect();
+    let moves: Vec<Move> = contents
+        .split(",")
+        .map(|e| day_3::Move::parse_input(e))
+        .collect();
     let mut points: Vec<Point> = Vec::new();
-    points.push(Point::new_point(0,0));
+    points.push(Point::new_point(0, 0));
     for movement in &moves {
-        points.push(points.last().unwrap().parse_move( *movement));
+        points.push(points.last().unwrap().parse_move(*movement));
     }
     Ok(points)
 }

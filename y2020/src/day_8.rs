@@ -1,9 +1,5 @@
 pub fn part_1(input: &str) -> i32 {
-    let mut cpu = CPU::new(
-        input.lines()
-            .map(|op| Op::parse(op))
-            .collect::<Vec<Op>>()
-    );
+    let mut cpu = CPU::new(input.lines().map(|op| Op::parse(op)).collect::<Vec<Op>>());
 
     loop {
         if cpu.process().is_none() {
@@ -18,7 +14,7 @@ pub fn part_1(input: &str) -> i32 {
 struct CPU {
     acc: i32,
     ptr: usize,
-    ops: Vec<Op>
+    ops: Vec<Op>,
 }
 
 impl CPU {
@@ -26,7 +22,7 @@ impl CPU {
         Self {
             acc: 0,
             ptr: 0,
-            ops
+            ops,
         }
     }
 
@@ -39,7 +35,7 @@ impl CPU {
         };
         match valid {
             true => Some(self.acc),
-            false => None
+            false => None,
         }
     }
 
@@ -73,7 +69,7 @@ impl CPU {
                     self.ptr += self.cur_val() as usize;
                     true
                 }
-            },
+            }
             false => {
                 if self.cur_val().abs() as usize > self.ptr {
                     false
@@ -120,7 +116,7 @@ impl Op {
 
         Op {
             instruction: inst_fromstr,
-            val: val_fromstr
+            val: val_fromstr,
         }
     }
 }

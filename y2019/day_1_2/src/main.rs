@@ -1,38 +1,37 @@
-use std::fs::File;
 use std::env;
+use std::fs::File;
 use std::io::{BufRead, BufReader, Error, ErrorKind, Read};
 
 fn read(fname: &str) -> Result<Vec<i64>, Error> {
     let io = File::open(fname)?;
     let br = BufReader::new(io);
     br.lines()
-        .map(|line| line.and_then(|v| v.parse().map_err(
-            |e| Error::new(ErrorKind::InvalidData, e)
-        )))
+        .map(|line| line.and_then(|v| v.parse().map_err(|e| Error::new(ErrorKind::InvalidData, e))))
         .collect()
 }
 
 fn parse_list(fname: &str) -> Result<Vec<i64>, Error> {
     let mut contents = String::new();
     File::open(fname)?.read_to_string(&mut contents)?;
-    contents.split(",").map(|v| v.parse().map_err(
-        |e| Error::new(ErrorKind::InvalidData, e)
-    )).collect()
+    contents
+        .split(",")
+        .map(|v| v.parse().map_err(|e| Error::new(ErrorKind::InvalidData, e)))
+        .collect()
 }
 
 fn compute_day_1(vec: Vec<i64>) -> i64 {
-    vec.iter().map(|num| compute_fuel_cost( *num)).sum()
+    vec.iter().map(|num| compute_fuel_cost(*num)).sum()
 }
 
 fn compute_fuel_cost(cost: i64) -> i64 {
     match cost / 3 - 2 {
         res if res <= 0 => 0,
-        res => res + compute_fuel_cost(res)
+        res => res + compute_fuel_cost(res),
     }
 }
 
 fn compute_day_2(input_1: usize, input_2: usize, vec: &Vec<i64>) -> Vec<i64> {
-    let mut code: Vec<usize> = vec.iter().map( |&e| { e as usize }).collect();
+    let mut code: Vec<usize> = vec.iter().map(|&e| e as usize).collect();
     let mut index = 0;
     code[1] = input_1;
     code[2] = input_2;
@@ -49,7 +48,7 @@ fn compute_day_2(input_1: usize, input_2: usize, vec: &Vec<i64>) -> Vec<i64> {
         };
         index += 4;
     }
-    code.iter().map( |&e| { e as i64 }).collect()
+    code.iter().map(|&e| e as i64).collect()
 }
 
 fn main() -> Result<(), Error> {
