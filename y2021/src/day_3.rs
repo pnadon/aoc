@@ -86,7 +86,7 @@ fn get_oxygen_and_c02_readings(lines: Vec<Line>) -> (Line, Line) {
 
   let c02_reading = (1..NUM_BITS).fold(c02, |acc, i| {
     if acc.len() > 1 {
-        sort_oxygen_and_c02(i, acc).1
+      sort_oxygen_and_c02(i, acc).1
     } else {
       acc
     }
