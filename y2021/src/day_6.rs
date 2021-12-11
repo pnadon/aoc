@@ -1,7 +1,7 @@
-use std::{fs::File, collections::VecDeque};
+use std::{collections::VecDeque, fs::File};
 
-use anyhow::Result;
 use crate::helpers::comma_delimited_input;
+use anyhow::Result;
 
 const START_TIMER: usize = 8;
 const RESET_TIMER: usize = 6;
@@ -18,8 +18,6 @@ pub fn solve_part2(f: File) -> Result<u128> {
   Ok(compute_jellyfish_after_days(256, nums))
 }
 
-
-
 fn count_jellyfish_after_days(days: usize, mut timers: Vec<usize>) -> usize {
   let mut nums = vec![];
   // simulate for n days
@@ -30,7 +28,7 @@ fn count_jellyfish_after_days(days: usize, mut timers: Vec<usize>) -> usize {
       *timer = RESET_TIMER + 1;
       num_zero += 1;
     }
-    
+
     // decrement timer
     for timer in timers.iter_mut() {
       *timer -= 1;
@@ -49,10 +47,9 @@ fn count_jellyfish_after_days(days: usize, mut timers: Vec<usize>) -> usize {
 }
 
 fn compute_jellyfish_after_days(days: usize, timers: Vec<usize>) -> u128 {
-  
   // 0 to 6 incl., in rotation
   let mut pools: VecDeque<u128> = VecDeque::from([0; 7]);
-  
+
   // enqueued to be added to the pools
   let mut num_at_8: u128 = 0;
   let mut num_at_7: u128 = 0;
