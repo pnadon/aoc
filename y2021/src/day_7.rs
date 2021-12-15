@@ -1,5 +1,5 @@
 use anyhow::Result;
-use std::{fs::File};
+use std::fs::File;
 
 use crate::helpers::comma_delimited_input;
 
