@@ -29,7 +29,7 @@ pub fn solve_part2(f: File) -> Result<usize> {
   )
 }
 
-fn compute_cost_part1(positions: &Vec<usize>, destination: usize) -> usize {
+fn compute_cost_part1(positions: &[usize], destination: usize) -> usize {
   positions
     .iter()
     .map(|pos| {
@@ -42,7 +42,7 @@ fn compute_cost_part1(positions: &Vec<usize>, destination: usize) -> usize {
     .sum()
 }
 
-fn compute_cost_part2(positions: &Vec<usize>, destination: usize) -> usize {
+fn compute_cost_part2(positions: &[usize], destination: usize) -> usize {
   positions
     .iter()
     .map(|pos| fuel_cost(*pos, destination))

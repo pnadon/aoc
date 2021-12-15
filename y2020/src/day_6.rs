@@ -25,9 +25,7 @@ fn num_all_chosen(input: &str) -> usize {
       line
         .chars()
         .filter(|c| c.is_alphabetic())
-        .fold(0 as u32, |acc, chr| {
-          acc | (1 << (letter_to_idx(chr) as u32))
-        })
+        .fold(0_u32, |acc, chr| acc | (1 << (letter_to_idx(chr) as u32)))
     })
     .fold(((1 << 26) - 1) as u32, |acc, choices| acc & choices)
     .count_ones() as usize

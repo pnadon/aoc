@@ -54,9 +54,9 @@ impl TryFrom<&str> for Dir {
   type Error = ParseIntError;
   fn try_from(input: &str) -> Result<Self, Self::Error> {
     match input.split(' ').collect::<Vec<&str>>().as_slice() {
-      &["forward", v] => v.parse().map(Dir::Forward),
-      &["up", v] => v.parse().map(Dir::Up),
-      &["down", v] => v.parse().map(Dir::Down),
+      ["forward", v] => v.parse().map(Dir::Forward),
+      ["up", v] => v.parse().map(Dir::Up),
+      ["down", v] => v.parse().map(Dir::Down),
       _ => panic!("invalid direction, this shouldnt happen"),
     }
   }

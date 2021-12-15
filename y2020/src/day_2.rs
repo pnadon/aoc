@@ -32,7 +32,7 @@ impl PasswordReqs {
     let params = input.split(|c| c == ' ' || c == '-').collect::<Vec<&str>>();
     let start = params[0].parse::<usize>().unwrap();
     let end = params[1].parse::<usize>().unwrap();
-    let chr = params[2].chars().nth(0).unwrap();
+    let chr = params[2].chars().next().unwrap();
     Self {
       start,
       end,

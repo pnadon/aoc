@@ -1,5 +1,5 @@
-use anyhow::{anyhow, Result};
-use itertools::Itertools;
+use anyhow::Result;
+
 use std::{
   fs::File,
   io::{BufRead, BufReader},
@@ -29,7 +29,7 @@ pub fn solve_part2(f: File) -> Result<usize> {
     }
   }
 
-  basin_sizes.sort();
+  basin_sizes.sort_unstable();
 
   Ok(basin_sizes.iter().rev().take(3).product())
 }
@@ -46,7 +46,7 @@ fn setup(f: File) -> Vec<Vec<usize>> {
     .collect::<Vec<Vec<usize>>>()
 }
 
-fn get_risk_level(nums: &Vec<Vec<usize>>, i: usize, j: usize) -> usize {
+fn get_risk_level(nums: &[Vec<usize>], i: usize, j: usize) -> usize {
   let height = nums[i][j];
   let is_hole = !((i > 0 && nums[i - 1][j] <= height)
     || (i + 1 < nums.len() && nums[i + 1][j] <= height)

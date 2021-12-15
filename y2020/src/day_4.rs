@@ -21,21 +21,21 @@ pub fn part_2(input: &str) -> usize {
         && passport.split_whitespace().all(|field| match &field[..4] {
           "byr:" => {
             if let Ok(num) = field[4..].parse::<u32>() {
-              1920 <= num && num <= 2002
+              (1920..=2002).contains(&num)
             } else {
               false
             }
           }
           "iyr:" => {
             if let Ok(num) = field[4..].parse::<u32>() {
-              2010 <= num && num <= 2020
+              (2010..=2020).contains(&num)
             } else {
               false
             }
           }
           "eyr:" => {
             if let Ok(num) = field[4..].parse::<u32>() {
-              2020 <= num && num <= 2030
+              (2020..=2030).contains(&num)
             } else {
               false
             }
@@ -54,13 +54,13 @@ fn match_measurement(input: &str) -> bool {
   if input.ends_with("cm") {
     if let Some(num_end) = input.find("cm") {
       if let Ok(num) = input[..num_end].parse::<u32>() {
-        return 150 <= num && num <= 193;
+        return (150..=193).contains(&num);
       }
     }
   } else if input.ends_with("in") {
     if let Some(num_end) = input.find("in") {
       if let Ok(num) = input[..num_end].parse::<u32>() {
-        return 59 <= num && num <= 76;
+        return (59..=76).contains(&num);
       }
     }
   }

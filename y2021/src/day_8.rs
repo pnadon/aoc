@@ -12,10 +12,7 @@ pub fn solve_part1(f: File) -> Result<usize> {
       let output_vals = get_output_vals(line.unwrap())?;
       let num_unique = output_vals
         .iter()
-        .filter(|word| match word.len() {
-          2 | 4 | 3 | 7 => true,
-          _ => false,
-        })
+        .filter(|word| matches!(word.len(), 2 | 4 | 3 | 7))
         .count();
 
       Ok(num_unique)
@@ -60,7 +57,7 @@ fn compute_output_num(input: String) -> Result<usize> {
 
   // num 1s
   // 2, 3, 4, 5, 5, 5, 6, 6, 6, 7
-  signals.sort_by(|num1, num2| num1.count_ones().cmp(&num2.count_ones()));
+  signals.sort_by_key(|num1| num1.count_ones());
   assert_eq!(signals.len(), 10);
 
   let mut digits = [0; 10];
@@ -132,7 +129,7 @@ fn compute_output_num(input: String) -> Result<usize> {
         .iter()
         .enumerate()
         .find(|(_, val)| *val == c)
-        .ok_or(anyhow!("missing digit at {}", i))
+        .ok_or_else(|| anyhow!("missing digit at {}", i))
         .map(|(j, _)| j * 10_usize.pow((num_outputs - i - 1) as u32))
     })
     .sum::<Result<usize>>()?;
@@ -141,7 +138,7 @@ fn compute_output_num(input: String) -> Result<usize> {
 }
 
 fn chars_to_set(chars: &str) -> Result<u8> {
-  assert!(chars.len() > 0);
+  assert!(!chars.is_empty());
   chars
     .chars()
     .map(|c| match c {
@@ -152,7 +149,7 @@ fn chars_to_set(chars: &str) -> Result<u8> {
       'e' => Ok(1 << 4),
       'f' => Ok(1 << 5),
       'g' => Ok(1 << 6),
-      c => Err(anyhow!("invalid char found: {}", c))?,
+      c => return Err(anyhow!("invalid char found: {}", c)),
     })
     .reduce(|a, b| Ok(a? | b?))
     .ok_or(anyhow!("chars shouldn't be empty"))?

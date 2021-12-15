@@ -35,9 +35,7 @@ fn count_jellyfish_after_days(days: usize, mut timers: Vec<usize>) -> usize {
     }
 
     // push n new timers, n == number of previously finished timers
-    for _ in 0..num_zero {
-      timers.push(START_TIMER);
-    }
+    timers.append(&mut vec![START_TIMER; num_zero]);
     nums.push(timers.len());
   }
 

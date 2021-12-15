@@ -14,7 +14,7 @@ pub fn part_2(input: &str) -> u16 {
   seats
     .iter()
     .enumerate()
-    .skip_while(|(_, i)| **i == false)
+    .skip_while(|(_, i)| !(**i))
     .find(|(_, seat)| !**seat)
     .unwrap()
     .0 as u16

@@ -1,5 +1,5 @@
 pub fn part_1(input: &str) -> i32 {
-  let mut cpu = CPU::new(input.lines().map(|op| Op::parse(op)).collect::<Vec<Op>>());
+  let mut cpu = Cpu::new(input.lines().map(Op::parse).collect::<Vec<Op>>());
 
   loop {
     if cpu.process().is_none() {
@@ -11,13 +11,13 @@ pub fn part_1(input: &str) -> i32 {
 }
 
 #[derive(Debug)]
-struct CPU {
+struct Cpu {
   acc: i32,
   ptr: usize,
   ops: Vec<Op>,
 }
 
-impl CPU {
+impl Cpu {
   fn new(ops: Vec<Op>) -> Self {
     Self {
       acc: 0,
@@ -28,10 +28,10 @@ impl CPU {
 
   fn process(&mut self) -> Option<i32> {
     let valid = match self.cur_ins() {
-      Instruction::ACC => self.handle_acc(),
-      Instruction::INV => false,
-      Instruction::JMP => self.handle_jmp(),
-      Instruction::NOP => self.increment(),
+      Instruction::Acc => self.handle_acc(),
+      Instruction::Inv => false,
+      Instruction::Jmp => self.handle_jmp(),
+      Instruction::Nop => self.increment(),
     };
     match valid {
       true => Some(self.acc),
@@ -88,7 +88,7 @@ impl CPU {
   }
 
   fn consume(&mut self) {
-    self.ops[self.ptr].instruction = Instruction::INV;
+    self.ops[self.ptr].instruction = Instruction::Inv;
   }
 
   fn len(&self) -> usize {
@@ -107,9 +107,9 @@ impl Op {
     let mut splt = s.split(' ');
 
     let inst_fromstr = match splt.next() {
-      Some("nop") => Instruction::NOP,
-      Some("jmp") => Instruction::JMP,
-      Some("acc") => Instruction::ACC,
+      Some("nop") => Instruction::Nop,
+      Some("jmp") => Instruction::Jmp,
+      Some("acc") => Instruction::Acc,
       _ => panic!("invalid"),
     };
     let val_fromstr = splt.next().unwrap().parse::<i32>().unwrap();
@@ -123,8 +123,8 @@ impl Op {
 
 #[derive(PartialEq, Debug, Copy, Clone)]
 enum Instruction {
-  NOP,
-  JMP,
-  ACC,
-  INV,
+  Nop,
+  Jmp,
+  Acc,
+  Inv,
 }

@@ -19,7 +19,7 @@ pub fn part_2(target_sum: u32, nums: &str) {
     .lines()
     .map(|num| (num.parse::<u32>().unwrap()))
     .collect::<Vec<u32>>();
-  sorted_nums.sort();
+  sorted_nums.sort_unstable();
   for num in sorted_nums {
     if num >= target_sum {
       break;
