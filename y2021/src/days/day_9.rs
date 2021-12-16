@@ -5,8 +5,10 @@ use std::{
   io::{BufRead, BufReader},
 };
 
+use crate::helpers::digit_grid;
+
 pub fn solve_part1(f: File) -> Result<usize> {
-  let nums = setup(f);
+  let nums = digit_grid(f);
 
   let mut sum = 0;
   for i in 0..nums.len() {
@@ -20,7 +22,7 @@ pub fn solve_part1(f: File) -> Result<usize> {
 }
 
 pub fn solve_part2(f: File) -> Result<usize> {
-  let mut nums = setup(f);
+  let mut nums = digit_grid(f);
 
   let mut basin_sizes: Vec<usize> = vec![];
   for i in 0..nums.len() {
@@ -32,18 +34,6 @@ pub fn solve_part2(f: File) -> Result<usize> {
   basin_sizes.sort_unstable();
 
   Ok(basin_sizes.iter().rev().take(3).product())
-}
-
-fn setup(f: File) -> Vec<Vec<usize>> {
-  BufReader::new(f)
-    .lines()
-    .map(|l| {
-      l.unwrap()
-        .chars()
-        .map(|c| c.to_digit(10).unwrap() as usize)
-        .collect::<Vec<usize>>()
-    })
-    .collect::<Vec<Vec<usize>>>()
 }
 
 fn get_risk_level(nums: &[Vec<usize>], i: usize, j: usize) -> usize {

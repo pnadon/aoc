@@ -16,3 +16,15 @@ pub fn comma_delimited_input(f: File) -> Result<Vec<usize>> {
 
   Ok(nums)
 }
+
+pub fn digit_grid(f: File) -> Vec<Vec<usize>> {
+  BufReader::new(f)
+    .lines()
+    .map(|l| {
+      l.unwrap()
+        .chars()
+        .map(|c| c.to_digit(10).unwrap() as usize)
+        .collect::<Vec<usize>>()
+    })
+    .collect::<Vec<Vec<usize>>>()
+}
