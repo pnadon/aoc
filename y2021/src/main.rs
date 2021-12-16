@@ -63,8 +63,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     (9, 2) => day_9::solve_part2(day_input)?.into(),
     (10, 1) => day_10::solve_part1(day_input).into(),
     (10, 2) => day_10::solve_part2(day_input).into(),
-    (_, 1) => day_11::solve_part1(day_input).into(),
-    (_, 2) => day_11::solve_part2(day_input).into(),
+    (11, 1) => day_11::solve_part1(day_input).into(),
+    (11, 2) => day_11::solve_part2(day_input).into(),
+    (_, 1) => day_12::solve_part1(day_input).into(),
+    (_, 2) => day_12::solve_part2(day_input).into(),
     _ => return Err(anyhow::anyhow!("you must select a valid problem").into()),
   };
 
