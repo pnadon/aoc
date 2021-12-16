@@ -1,9 +1,6 @@
 use anyhow::Result;
 
-use std::{
-  fs::File,
-  io::{BufRead, BufReader},
-};
+use std::fs::File;
 
 use crate::helpers::digit_grid;
 

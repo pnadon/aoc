@@ -100,6 +100,7 @@ fn count_and_reset_flashed_cells(nums: &mut [Vec<usize>]) -> usize {
   counter
 }
 
+#[allow(unused)]
 fn print_matrix(nums: &[Vec<usize>]) {
   nums.iter().for_each(|l| {
     l.iter().for_each(|v| {
@@ -109,7 +110,7 @@ fn print_matrix(nums: &[Vec<usize>]) {
         print!("{:X}", v)
       }
     });
-    println!("")
+    println!()
   });
-  println!("");
+  println!();
 }

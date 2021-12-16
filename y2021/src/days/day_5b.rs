@@ -1,12 +1,15 @@
 use anyhow::{anyhow, Result};
-
-use std::collections::HashMap;
+use std::cmp::{max, min};
+use std::collections::HashSet;
 use std::fmt::Display;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::ops::{Add, Sub};
 
+// doesnt work :( see part5a
+#[allow(dead_code)]
 pub fn solve_part1(f: File) -> Result<usize> {
+  let mut intersections = HashSet::new();
   let lines = BufReader::new(f)
     .lines()
     .map(|l| anyhow::Ok(parse_line(&l?))?)
@@ -19,44 +22,19 @@ pub fn solve_part1(f: File) -> Result<usize> {
     })
     .collect::<Result<Vec<Line>>>()?;
 
-  // lines.iter().for_each(|l| println!("{}", l));
-  // println!("{}", lines.len());
+  lines.iter().for_each(|l| println!("{}", l));
+  println!("{}", lines.len());
 
-  let mut sparse_matrix: HashMap<Point, usize> = HashMap::new();
-
-  for line in lines.iter() {
-    line.intermediate_points().into_iter().for_each(|p| {
-      let prev = *sparse_matrix.get(&p).unwrap_or(&0);
-      sparse_matrix.insert(p, 1 + prev);
-    })
+  for line1 in lines.iter() {
+    for line2 in lines.iter().filter(|l| l != &line1) {
+      if let Some(p) = line1.intersects(line2) {
+        println!("{} intersects {} at {}", line1, line2, p);
+        intersections.insert(p);
+      }
+    }
   }
 
-  // println!("{:?}", sparse_matrix);
-
-  Ok(sparse_matrix.into_values().filter(|n| n > &1).count())
-}
-
-pub fn solve_part2(f: File) -> Result<usize> {
-  let lines = BufReader::new(f)
-    .lines()
-    .map(|l| anyhow::Ok(parse_line(&l?))?)
-    .collect::<Result<Vec<Line>>>()?;
-
-  // lines.iter().for_each(|l| println!("{}", l));
-  // println!("{}", lines.len());
-
-  let mut sparse_matrix: HashMap<Point, usize> = HashMap::new();
-
-  for line in lines.iter() {
-    line.intermediate_points().into_iter().for_each(|p| {
-      let prev = *sparse_matrix.get(&p).unwrap_or(&0);
-      sparse_matrix.insert(p, 1 + prev);
-    })
-  }
-
-  // println!("{:?}", sparse_matrix);
-
-  Ok(sparse_matrix.into_values().filter(|n| n > &1).count())
+  Ok(intersections.len())
 }
 
 fn parse_line(input: &str) -> Result<Line> {
@@ -92,38 +70,49 @@ fn parse_line(input: &str) -> Result<Line> {
 struct Line {
   p1: Point,
   p2: Point,
+  a: isize,
+  b: isize,
+  c: isize,
 }
 
 impl Line {
   fn new(p1: Point, p2: Point) -> Self {
-    Self { p1, p2 }
+    let Distance { x: b, y: a } = p2 - p1;
+    Self {
+      p1,
+      p2,
+      a,
+      b,
+      c: a * p1.x + b * p1.y,
+    }
   }
 
-  fn distance(&self) -> Distance {
-    self.p2 - self.p1
+  fn det(&self, other: &Self) -> isize {
+    self.a * other.b - other.a * self.b
   }
 
-  fn intermediate_points(&self) -> Vec<Point> {
-    let (step, total) = match self.distance() {
-      dist if dist.x == 0 && dist.y != 0 => (Distance::new(0, dist.y / dist.y.abs()), dist.y.abs()),
-      dist if dist.x != 0 && dist.y == 0 => (Distance::new(dist.x / dist.x.abs(), 0), dist.x.abs()),
-      dist if dist.x != 0 && dist.y != 0 => (
-        Distance::new(dist.x / dist.x.abs(), dist.y / dist.y.abs()),
-        dist.x.abs(),
-      ),
-      dist => panic!(
-        "expected one of the distance axis to be zero, got {:?}",
-        dist
-      ),
-    };
+  fn intersects(&self, other: &Self) -> Option<Point> {
+    match self.det(other) {
+      0 => None, // parallel
+      determinant => {
+        let x = other.b * self.c - self.b * other.c / determinant;
+        let y = self.a * other.c - other.a * self.c / determinant;
+        if x >= 0 && y >= 0 {
+          let p = Point::new(x, y);
+          if self.lies_within(p) {
+            return Some(p);
+          }
+        }
+        None
+      }
+    }
+  }
 
-    (0..=total)
-      .scan(self.p1, |state, _| {
-        let prev_state = *state;
-        *state = *state + step;
-        Some(prev_state)
-      })
-      .collect::<Vec<Point>>()
+  fn lies_within(&self, p: Point) -> bool {
+    p.x >= min(self.p1.x, self.p2.x)
+      && p.x <= max(self.p1.x, self.p2.x)
+      && p.y >= min(self.p1.y, self.p2.y)
+      && p.y <= max(self.p1.y, self.p2.y)
   }
 }
 
@@ -172,7 +161,7 @@ impl Add<Distance> for Point {
   type Output = Self;
 
   fn add(self, rhs: Distance) -> Point {
-    Self::new(self.x + rhs.x, self.y + rhs.y)
+    Self::new(dbg!(self.x + rhs.x), dbg!(self.y + rhs.y))
   }
 }
 
@@ -180,7 +169,7 @@ impl Sub<Distance> for Point {
   type Output = Self;
 
   fn sub(self, rhs: Distance) -> Self::Output {
-    Self::new(self.x - rhs.x, self.y - rhs.y)
+    Self::new(dbg!(self.x - rhs.x), dbg!(self.y - rhs.y))
   }
 }
 
